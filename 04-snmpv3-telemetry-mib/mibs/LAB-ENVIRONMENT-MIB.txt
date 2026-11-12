@@ -1,0 +1,94 @@
+LAB-ENVIRONMENT-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    MODULE-IDENTITY, OBJECT-TYPE, NOTIFICATION-TYPE, Integer32, Gauge32,
+    TimeTicks, enterprises
+    FROM SNMPv2-SMI;
+
+labEnvironment MODULE-IDENTITY
+    LAST-UPDATED "202512270000Z"
+    ORGANIZATION "Network Management Team"
+    CONTACT-INFO "email: admin@linux.local"
+    DESCRIPTION  "MIB module for Distributed Environmental Monitoring System."
+    ::= { enterprises 9999 }
+
+-- Scalar Object for System Status
+systemStatus OBJECT-TYPE
+    SYNTAX INTEGER {
+        ok(1),
+        warning(2),
+        critical(3)
+    }
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION "Overall system status based on sensor values."
+    ::= { labEnvironment 1 }
+
+-- Sensor Table
+sensorTable OBJECT-TYPE
+    SYNTAX     SEQUENCE OF SensorEntry
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION "A table consisting of sensor nodes."
+    ::= { labEnvironment 2 }
+
+sensorEntry OBJECT-TYPE
+    SYNTAX     SensorEntry
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION "Entry containing data for a specific sensor node."
+    INDEX      { nodeID }
+    ::= { sensorTable 1 }
+
+SensorEntry ::= SEQUENCE {
+    nodeID       Integer32,
+    temperature  Integer32,
+    humidity     Integer32,
+    batteryLevel Gauge32,
+    lastContact  TimeTicks
+}
+
+nodeID OBJECT-TYPE
+    SYNTAX     Integer32 (1..65535)
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION "Unique identifier for the sensor node."
+    ::= { sensorEntry 1 }
+
+temperature OBJECT-TYPE
+    SYNTAX     Integer32 (-50..100)
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION "Temperature reading in Celsius."
+    ::= { sensorEntry 2 }
+
+humidity OBJECT-TYPE
+    SYNTAX     Integer32 (0..100)
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION "Humidity percentage (0-100%)."
+    ::= { sensorEntry 3 }
+
+batteryLevel OBJECT-TYPE
+    SYNTAX     Gauge32
+    UNITS      "percentage"
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION "Current battery level of the sensor."
+    ::= { sensorEntry 4 }
+
+lastContact OBJECT-TYPE
+    SYNTAX     TimeTicks
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION "Time since the last contact with the sensor."
+    ::= { sensorEntry 5 }
+
+-- Notifications
+batteryLowNotification NOTIFICATION-TYPE
+    OBJECTS     { nodeID, batteryLevel }
+    STATUS      current
+    DESCRIPTION "Notification sent when battery level drops below 10%."
+    ::= { labEnvironment 3 }
+
+END
