@@ -1,0 +1,22 @@
+// /etc/bind/named.conf.local - Servidor Mestre (dns1 - 192.168.64.200)
+
+key "ddns-key" {
+    algorithm hmac-sha256;
+    secret "c2hhcmVkLXNlY3JldC10c2lnLWtleS1mb3ItZGRucw==";
+};
+
+zone "linux.local" {
+    type master;
+    file "/etc/bind/db.linux.local";
+    allow-transfer { 192.168.64.201; };
+    also-notify { 192.168.64.201; };
+    allow-update { key "ddns-key"; };
+};
+
+zone "64.168.192.in-addr.arpa" {
+    type master;
+    file "/etc/bind/db.64";
+    allow-transfer { 192.168.64.201; };
+    also-notify { 192.168.64.201; };
+    allow-update { key "ddns-key"; };
+};

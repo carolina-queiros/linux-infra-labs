@@ -1,0 +1,17 @@
+$TTL 604800
+@   IN  SOA dns1.linux.local. root.linux.local. (
+            2025121401  ; Serial
+            604800      ; Refresh
+            86400       ; Retry
+            2419200     ; Expire
+            604800 )    ; Negative Cache TTL
+
+; Mapeamentos Inversos (IP para Nome)
+@           IN  NS      dns1.linux.local.
+@           IN  NS      dns2.linux.local.
+
+200         IN  PTR     dns1.linux.local.
+201         IN  PTR     dns2.linux.local.
+100         IN  PTR     dhcp1.linux.local.
+101         IN  PTR     dhcp2.linux.local.
+90          IN  PTR     wstation.linux.local.

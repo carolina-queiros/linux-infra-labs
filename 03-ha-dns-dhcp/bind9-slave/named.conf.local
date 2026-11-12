@@ -1,0 +1,13 @@
+// /etc/bind/named.conf.local - Servidor Secundario/Slave (dns2 - 192.168.64.201)
+
+zone "linux.local" {
+    type slave;
+    file "/var/cache/bind/db.linux.local";
+    masters { 192.168.64.200; };
+};
+
+zone "64.168.192.in-addr.arpa" {
+    type slave;
+    file "/var/cache/bind/db.64";
+    masters { 192.168.64.200; };
+};
