@@ -1,0 +1,8 @@
+# /etc/exports - Servidor de Storage (store - 192.168.100.2)
+
+# Partilha NFSv4 restrita ao Controlador de Dominio (dc - 192.168.100.3)
+# Usa root_squash e nosuid para evitar escalada de privilegios atraves do bit SUID
+/mnt/storage 192.168.100.3(rw,sync,no_subtree_check,root_squash,nosuid)
+
+# Partilha /home/shared com leitura/escrita na sub-rede local e leitura (ro) para restantes
+/home/shared 192.168.100.0/24(rw,sync,no_subtree_check,nosuid) *(ro,sync,no_subtree_check,nosuid)

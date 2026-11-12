@@ -1,0 +1,3 @@
+# Entrada para montagem automatica no /etc/fstab do Controlador de Dominio
+# A opcao _netdev instrui o sistema a aguardar que a rede esteja ativa antes de montar no arranque
+192.168.100.2:/mnt/storage  /mnt/backup  nfs  defaults,_netdev,nosuid  0  0
